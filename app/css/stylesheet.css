@@ -33,3 +33,16 @@
     left:0;
     border: 1px solid red;
 }
+
+#title {
+    text-align:center;
+}
+
+#heart {
+    color:#2be6c5
+}
+
+#infop {
+    text-align:center;
+    padding:10px;
+}
