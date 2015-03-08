@@ -80,7 +80,7 @@ def create_wallet():
         return r.text
 
 @app.route("/new_address", methods=['POST'])
-def new_address(guid, password, label):
+def new_address():
     payload = {
             'password': request.form['password'],
             'label': request.form.get('label', "")
@@ -90,6 +90,19 @@ def new_address(guid, password, label):
     baseurl = "https://blockchain.info/merchant/"+guid+"/new_address"
 
     r = requests.post(baseurl,data=payload)
+    jsondata = r.json()
+    return jsonify(**jsondata)
+
+@app.route("/list", methods=['POST'])
+def list():
+    payload = {
+            'password': request.form['password'],
+    }
+    guid = request.form['guid']
+
+    baseurl = "https://blockchain.info/merchant/"+guid+"/list"
+
+    r = requests.get(baseurl)
     jsondata = r.json()
     return jsonify(**jsondata)
 
