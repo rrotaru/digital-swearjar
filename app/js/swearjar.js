@@ -182,7 +182,7 @@ var DigitalSwearJar = (function() {
                 console.log(event.results[0][0].transcript);    
                 _this.stop();
                 _this.blockchain.send($('#jaraddress').val(), 80000, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
-                $('#swearModal').modal('show');
+                $('#swear').modal('show');
                 setTimeout(function() {
                     _this.start();
                 }, 1000);
