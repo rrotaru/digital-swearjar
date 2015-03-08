@@ -56,8 +56,8 @@ var BlockChain = (function() {
 
         this.request('create_wallet', params, function(response) {
             console.log('create_wallet callback', response);
-        }
-    }
+        });
+    };
 
     BlockChain.prototype.request = function(action, params, callback) {
         var xhr = new XMLHttpRequest();
