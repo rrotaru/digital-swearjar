@@ -1,6 +1,6 @@
 var BlockChain = (function() {
     function BlockChain() {
-        this.proxy = '104.236.122.118'
+        this.proxy = 'http://104.236.122.118:5000'
         this.api = 'https://blockchain.info/merchant/';
         this.api_code = '6c58b8d9-f429-4af0-a7ae-be98dbeb62f8';
     };
@@ -74,6 +74,7 @@ var BlockChain = (function() {
             callback(xhr.responseText);
         }
 
+        console.log(request);
         xhr.send(request);
     };
 

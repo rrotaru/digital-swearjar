@@ -49,9 +49,9 @@ def show_balance():
 @app.route("/payment", methods=['POST'])
 def make_payment():
     payload = {
-            password:request.form['password'], 
-            to:request.form['to'], 
-            note:request.form.get('note', "")    
+            'password':request.form['password'], 
+            'to':request.form['to'], 
+            'note':request.form.get('note', "")    
     }
     guid = request.form['guid']    
 
@@ -60,28 +60,29 @@ def make_payment():
     jsondata = r.json()
     return jsonify(**jsondata)
 
-@app.route("/create_wallet")
+@app.route("/create_wallet", methods=['POST'])
 def create_wallet():
+    print request, request.form, request.form['password']
     payload = {
-            password: request.form['password'],
-            email: requet.form.get('email', ""),
-            label: request.form.get('label', ""),
+            'password': request.form['password'],
+            'email': request.form.get('email', ""),
+            'label': request.form.get('label', ""),
     }
 
     baseurl = "https://blockchain.info/api/v2/create_wallet"
     r = requests.get(baseurl)
     try:
         jsondata = r.json()
+        return jsonify(**jsondata)
     except Exception as e:
         print "Error: ", e
+        return r.text
 
-    return jsonify(**jsondata)
-
-@app.route("/new_address")
+@app.route("/new_address", methods=['POST'])
 def new_address(guid, password, label):
     payload = {
-            password: request.form['password'],
-            label: request.form.get('label', "")
+            'password': request.form['password'],
+            'label': request.form.get('label', "")
     }
     guid = request.form['guid']
 
@@ -93,8 +94,11 @@ def new_address(guid, password, label):
 
 @app.route('/js/<path:path>')
 def send_js(path):
-    return send_from_directory('js', path) 
+    content = get_file('js/'+path);
+    return Response(content, mimetype="text/javascript")
 
 @app.route('/css/<path:path>')
 def send_css(path):
-    return send_from_directory('js', path) 
+    content = get_file('css/'+path);
+    return Response(content, mimetype="text/css")
+
