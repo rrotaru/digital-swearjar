@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Digital Swear Jar</title>
+    <title>CareSwears <3</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/stylesheet.css" rel="stylesheet">
@@ -16,8 +16,8 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="jumbotron">
-                <h1>Digital Swear Jar</h1>
-                <p>This is a blockchain.info API hack that uses Chrome's built in HTML 5 voice recognition to catch any swears you say and put $0.25 in Bitcoin in a 'swear jar' for you.</p>
+                <h1 id="title">CareSwears<span id="heart"><3</span></h1>
+                <p id="infop">This is a blockchain.info API hack that uses Chrome's built in HTML 5 voice recognition to catch any swears you say and put $0.25 in Bitcoin in a 'swear jar' for you.</p>
                 <div class="panel panel-default">
                   <div class="panel-body">
                       <span id="balance">0</span> BTC so far in your jar. 
@@ -98,11 +98,11 @@
             <div class="modal fade" id="swear" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
-                  <div class="modal-header">
+                  <div class="modal-header" style="text-align:center;">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Shame on you!</h4>
                   </div>
-                  <div class="modal-body">
+                  <div class="modal-body" style="text-align:center;">
                       </p>You've been caught. Now put the bitcoin in the jar.<p>
                       <img id="giphyimg" />
                   </div>
