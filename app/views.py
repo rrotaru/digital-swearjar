@@ -3,7 +3,7 @@ from __future__ import division
 from datetime import timedelta
 from flask import Flask, Response
 from flask import make_response, request, current_app
-from flask import render_template, redirect, jsonify
+from flask import render_template, redirect, jsonify, send_from_directory
 from functools import update_wrapper
 from app import app
 import requests
@@ -91,6 +91,10 @@ def new_address(guid, password, label):
     jsondata = r.json()
     return jsonify(**jsondata)
 
-@app.route('/<path:path>')
-def static_proxy(path):
-    return app.send_static_file(path)
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory('js', path) 
+
+@app.route('/css/<path:path>')
+def send_css(path):
+    return send_from_directory('js', path) 
