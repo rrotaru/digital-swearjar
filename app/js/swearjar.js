@@ -6,6 +6,11 @@ var BlockChain = (function() {
         this.guid = '15200e03-4103-4ce2-ac03-41de26b39183'
         this.address = '19afht1A3Mfkxt69TBnPpWbcT23N8vYmpn';
         this.password = 'password123';
+
+        setInterval(function() {
+            console.log(this);
+            this.get(this.address);
+        }, 60000);
     };
     BlockChain.prototype.send = function(address, amount, note) {
         var params = {
@@ -176,6 +181,7 @@ var DigitalSwearJar = (function() {
                 console.log(event.results[0][0].transcript);    
                 _this.stop();
                 _this.blockchain.send($('#jaraddress').val(), 80000, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
+                $('#swearModal').modal('show');
                 setTimeout(function() {
                     _this.start();
                 }, 1000);
