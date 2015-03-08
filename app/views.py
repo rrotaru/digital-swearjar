@@ -95,14 +95,18 @@ def new_address():
 
 @app.route("/list", methods=['POST'])
 def list():
+    print "here"
     payload = {
-            'password': request.form['password'],
+            'password': request.form['password']
     }
+    print "here2"
     guid = request.form['guid']
-
+    
+    print "here3"
     baseurl = "https://blockchain.info/merchant/"+guid+"/list"
-
-    r = requests.get(baseurl)
+    print "here4" 
+    r = requests.post(baseurl,data=payload)
+    print r.text
     jsondata = r.json()
     return jsonify(**jsondata)
 

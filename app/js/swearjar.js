@@ -49,12 +49,16 @@ var BlockChain = (function() {
 
     BlockChain.prototype.list = function(password) {
         var params = {
-            password: password
+            password: password,
+	    guid: this.guid
         }
         this.request('list', params, function(response) {
             console.log('addresses callback', response);
-            this.address = response.addresses[0].address;
-            this.balance = response.addresses[0].balance / 100000000.0;
+            if (response.addresses && response.addresses[0]) {
+                   console.log(this);
+		    this.address = response.addresses[0].address;
+		    this.balance = response.addresses[0].balance / 100000000.0;
+            }
         });
     }
 
@@ -111,11 +115,13 @@ var DigitalSwearJar = (function() {
 
         /* Set up blockchain stuff */
         this.blockchain = new BlockChain();
+        dbg = this.blockchain;
 
         (function(_this) {
             /* Set up UI event bindings */
             $('#signin').bind('click', function() {
                 if ($('#guid').val().length > 0) {
+     		    _this.blockchain.guid = $('#guid').val();
                     _this.blockchain.list($('#password').val());
                     console.log('logging in...');
                 } else if ($('#email').val().length > 0) {
@@ -188,5 +194,3 @@ var DigitalSwearJar = (function() {
 
     return DigitalSwearJar;
 })();
-
-DigitalSwearJar();
