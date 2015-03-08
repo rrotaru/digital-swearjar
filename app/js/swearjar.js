@@ -50,7 +50,7 @@ var BlockChain = (function() {
         var params = {
             password: password,
             email: email,
-            label: 'digital-swearjar',
+            label: 'digital swearjar',
             api_code: this.api_code
         }
 
