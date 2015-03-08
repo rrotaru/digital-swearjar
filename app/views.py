@@ -28,7 +28,7 @@ def get_file(filename):  # pragma: no cover
 #The base html page, nothing here yet
 @app.route("/")
 def hello():
-    content = get_file('../index.html')
+    content = get_file('index.html')
     return Response(content, mimetype="text/html")
 
 #API Call to show balance
@@ -90,3 +90,7 @@ def new_address(guid, password, label):
     r = requests.get(baseurl)
     jsondata = r.json()
     return jsonify(**jsondata)
+
+@app.route('/<path:path>')
+def static_proxy(path):
+    return app.send_static_file(path)
