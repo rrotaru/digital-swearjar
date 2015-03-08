@@ -1,5 +1,6 @@
 var BlockChain = (function() {
     function BlockChain() {
+        this.proxy = '104.236.122.118'
         this.api = 'https://blockchain.info/merchant/';
         this.api_code = '6c58b8d9-f429-4af0-a7ae-be98dbeb62f8';
     };
@@ -17,8 +18,6 @@ var BlockChain = (function() {
             console.log('payment callback', response);
         });
     };
-
-    BlockChain.prototype.login = function(address, password) {};
 
     BlockChain.prototype.get = function(address) {
         var params = {
@@ -40,52 +39,39 @@ var BlockChain = (function() {
 
         this.request('new_address', params, function(response) {
             console.log('new_address callback', response);
-        // send api request + return response
-        //this.address = response.address;
-        //this.link = response.link;
+            // send api request + return response
+            //this.address = response.address;
+            //this.link = response.link;
         });
 
     };
 
-    BlockChain.prototype.createWallet = function(password, email) {
-        var xhr = new XMLHttpRequest();
+    BlockChain.prototype.init = function(password, email) {
         var params = {
             password: password,
-            api_code: this.api_code,
             email: email,
-            cors: true
-        };
-        var request = Object.keys(params).map(function(k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]) }).join('&');        
-        
-        xhr.open("GET", 'https://blockchain.info/api/v2/create_wallet', true);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-        xhr.onreadystatechange = function() {
-            var response = JSON.parse(xhr.response);
-            console.log('CREATENEWWALLET',JSON.parse(xhr.responseText));
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                this.guid = response.guid;
-                this.address = response.address;
-                this.link = response.link;
-            }
+            label: 'digital-swearjar',
+            api_code: this.api_code
         }
-        xhr.send(request);
+
+        this.request('create_wallet', params, function(response) {
+            console.log('create_wallet callback', response);
+        }
     }
 
     BlockChain.prototype.request = function(action, params, callback) {
         var xhr = new XMLHttpRequest();
-        params.cors = true;
         var request = Object.keys(params).map(function(k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]) }).join('&');        
-        
-        xhr.open("GET", this.api+this.guid+'/'+action, true);
+
+        xhr.open("POST", [this.proxy, action].join('/'), true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xhr.onreadystatechange = function() {
-            console.log('get',JSON.parse(xhr.responseText));
+            console.log('get',xhr.responseText);
             if (xhr.readyState == 4 && xhr.status == 200) {
-                   
+
             }
-            callback(JSON.parse(xhr.responseText));
+            callback(xhr.responseText);
         }
 
         xhr.send(request);
@@ -113,15 +99,15 @@ var DigitalSwearJar = (function() {
 
         /* Speech recognition events and callbacks */
         this.recognition.onstart = function() {
-          console.log("Now listening...");
+            console.log("Now listening...");
         };
 
         this.recognition.onerror = function(e) {
-          console.log("Error:", e);
+            console.log("Error:", e);
         };
 
         this.recognition.onend = function() {
-          console.log("Stopped listening.");
+            console.log("Stopped listening.");
         };
 
 
@@ -136,13 +122,16 @@ var DigitalSwearJar = (function() {
             }
 
             // Unavoidable profanity filtering has us matching for the string '***'
-            if (transcript.search(/\*+/) && confidence > 0.75) {
+            if (transcript.search(/\*+/) > 0 && confidence > 0.75) {
                 // event.results[0] is always the highest confidence transcript                
-                console.log(event.results[0][0].transcript;    
-                this.recognition.stop();
-                this.blockchain.send(this.jar, this.amount, 'I was caught saying "'+transcript.match(/.\*+/)+'"!')
-                this.recognition.start();
+                console.log(this, transcript.search(/\*+/))
+                console.log(event.results[0][0].transcript);    
+                this.stop();
+                this.blockchain.send(this.jar, this.amount, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
+                this.start();
             }
+            if (event.results && event.results[0] && event.results[0][0])
+            console.log(event.results[0][0].confidence, event.results[0][0].transcript);
 
         };
 
@@ -160,34 +149,4 @@ var DigitalSwearJar = (function() {
     }
 
     return DigitalSwearJar;
-})();
-
-
-/* Debugging code */
-(function() {
-    var recognition = new webkitSpeechRecognition();
-
-    recognition.continuous     = true;
-    recognition.interimResults = true;
-    recognition.lang = 'en-US';
-    
-
-    recognition.onstart = function() {
-      console.log("Recognition started");
-    };
-
-    recognition.onresult = function(event){
-      console.log(event.results[0][0].confidence, event.results[0][0].transcript);
-    };
-
-    recognition.onerror = function(e) {
-      console.log("Error:", e);
-    };
-
-    recognition.onend = function() {
-      console.log("Speech recognition ended.");
-    };
-
-    return recognition;
-
 })();
