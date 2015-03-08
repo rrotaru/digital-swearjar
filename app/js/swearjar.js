@@ -26,8 +26,10 @@ var BlockChain = (function() {
             confirmations: 0
         }
 
-        this.request('address_balance', params, function(response) {
+        this.request('balance', params, function(response) {
             console.log('address_balance callback', response);
+            this.balance = response.balance;
+            $('#balance').val(this.balance);
         });
     };
 
@@ -39,23 +41,38 @@ var BlockChain = (function() {
 
         this.request('new_address', params, function(response) {
             console.log('new_address callback', response);
-            // send api request + return response
-            //this.address = response.address;
-            //this.link = response.link;
+            this.address = response.address;
+            this.get(this.address);
         });
 
     };
+
+    BlockChain.prototype.list = function(password) {
+        var params = {
+            password: password
+        }
+        this.request('list', params, function(response) {
+            console.log('addresses callback', response);
+            this.address = response.addresses[0].address;
+            this.balance = response.addresses[0].balance / 100000000.0;
+        });
+    }
 
     BlockChain.prototype.init = function(password, email) {
         var params = {
             password: password,
             email: email,
-            label: 'digital-swearjar',
+            label: 'digital swearjar',
             api_code: this.api_code
         }
 
         this.request('create_wallet', params, function(response) {
-            console.log('create_wallet callback', response);
+            this.guid=response.guid;
+            this.address=response.address;
+            this.link=response.link;
+
+            this.get(this.address);
+
         });
     };
 
@@ -67,7 +84,6 @@ var BlockChain = (function() {
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xhr.onreadystatechange = function() {
-            console.log('get',xhr.responseText);
             if (xhr.readyState == 4 && xhr.status == 200) {
 
             }
@@ -92,6 +108,32 @@ var DigitalSwearJar = (function() {
             alert("Your browser does not support speech recognition");
             return;
         }
+
+        /* Set up blockchain stuff */
+        this.blockchain = new BlockChain();
+
+        (function(_this) {
+            /* Set up UI event bindings */
+            $('#signin').bind('click', function() {
+                if ($('#guid').val().length > 0) {
+                    _this.blockchain.list($('#password').val());
+                    console.log('logging in...');
+                } else if ($('#email').val().length > 0) {
+                    _this.blockchain.init($('#password').val(), $('#email').val());
+                    console.log('signing up...');
+                } else {
+                    alert('Nope! You\'re being dumb.')
+                }
+            });
+
+            $('#listen').bind('click', function() {
+                _this.start();
+            });
+        })(this);
+        
+
+        $('#jaraddress').val('1ERdaVazk3rBTPTQJibjsSpRvDBpFTVqm');
+
         /* Set up html 5 webkit speech recognition */
         this.recognition = new webkitSpeechRecognition();
         this.recognition.continuous = true;
@@ -102,15 +144,12 @@ var DigitalSwearJar = (function() {
         this.recognition.onstart = function() {
             console.log("Now listening...");
         };
-
         this.recognition.onerror = function(e) {
             console.log("Error:", e);
         };
-
         this.recognition.onend = function() {
             console.log("Stopped listening.");
         };
-
 
         // Find a way to break down voice into chunks rather than
         // an accumulating string
@@ -128,7 +167,7 @@ var DigitalSwearJar = (function() {
                 console.log(this, transcript.search(/\*+/))
                 console.log(event.results[0][0].transcript);    
                 this.stop();
-                this.blockchain.send(this.jar, this.amount, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
+                this.blockchain.send($('#jaraddress').val(), 80000, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
                 this.start();
             }
             if (event.results && event.results[0] && event.results[0][0])
@@ -136,8 +175,6 @@ var DigitalSwearJar = (function() {
 
         };
 
-        /* Set up blockchain stuff */
-        this.blockchain = new BlockChain();
 
     }
 
@@ -151,3 +188,5 @@ var DigitalSwearJar = (function() {
 
     return DigitalSwearJar;
 })();
+
+DigitalSwearJar();

@@ -64,13 +64,14 @@ def make_payment():
 def create_wallet():
     print request, request.form, request.form['password']
     payload = {
+            'api_code': request.form['api_code'],
             'password': request.form['password'],
             'email': request.form.get('email', ""),
             'label': request.form.get('label', ""),
     }
 
     baseurl = "https://blockchain.info/api/v2/create_wallet"
-    r = requests.get(baseurl)
+    r = requests.get(baseurl,data=payload)
     try:
         jsondata = r.json()
         return jsonify(**jsondata)
@@ -79,7 +80,7 @@ def create_wallet():
         return r.text
 
 @app.route("/new_address", methods=['POST'])
-def new_address(guid, password, label):
+def new_address():
     payload = {
             'password': request.form['password'],
             'label': request.form.get('label', "")
@@ -87,6 +88,19 @@ def new_address(guid, password, label):
     guid = request.form['guid']
 
     baseurl = "https://blockchain.info/merchant/"+guid+"/new_address"
+
+    r = requests.get(baseurl)
+    jsondata = r.json()
+    return jsonify(**jsondata)
+
+@app.route("/list", methods=['POST'])
+def list():
+    payload = {
+            'password': request.form['password'],
+    }
+    guid = request.form['guid']
+
+    baseurl = "https://blockchain.info/merchant/"+guid+"/list"
 
     r = requests.get(baseurl)
     jsondata = r.json()
