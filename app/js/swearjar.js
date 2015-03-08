@@ -3,8 +3,10 @@ var BlockChain = (function() {
         this.proxy = 'http://104.236.122.118:5000'
         this.api = 'https://blockchain.info/merchant/';
         this.api_code = '6c58b8d9-f429-4af0-a7ae-be98dbeb62f8';
+        this.guid = '15200e03-4103-4ce2-ac03-41de26b39183'
+        this.address = '19afht1A3Mfkxt69TBnPpWbcT23N8vYmpn';
+        this.password = 'password123';
     };
-
     BlockChain.prototype.send = function(address, amount, note) {
         var params = {
             password: this.password,
@@ -50,14 +52,14 @@ var BlockChain = (function() {
     BlockChain.prototype.list = function(password) {
         var params = {
             password: password,
-	    guid: this.guid
+	        guid: this.guid
         }
         this.request('list', params, function(response) {
             console.log('addresses callback', response);
             if (response.addresses && response.addresses[0]) {
-                   console.log(this);
-		    this.address = response.addresses[0].address;
-		    this.balance = response.addresses[0].balance / 100000000.0;
+                console.log(this);
+		        this.address = response.addresses[0].address;
+		        this.balance = response.addresses[0].balance / 100000000.0;
             }
         });
     }
@@ -115,7 +117,6 @@ var DigitalSwearJar = (function() {
 
         /* Set up blockchain stuff */
         this.blockchain = new BlockChain();
-        dbg = this.blockchain;
 
         (function(_this) {
             /* Set up UI event bindings */
@@ -136,8 +137,8 @@ var DigitalSwearJar = (function() {
                 _this.start();
             });
         })(this);
-        
 
+        $('#youraddress').val(this.blockchain.address);
         $('#jaraddress').val('1ERdaVazk3rBTPTQJibjsSpRvDBpFTVqm');
 
         /* Set up html 5 webkit speech recognition */
@@ -159,7 +160,8 @@ var DigitalSwearJar = (function() {
 
         // Find a way to break down voice into chunks rather than
         // an accumulating string
-        this.recognition.onresult = function(event){
+        (function(_this) {
+        _this.recognition.onresult = function(event){
 
             // This is annoying javascript crap
             if (event.results && event.results[0] && event.results[0][0]) {
@@ -170,16 +172,19 @@ var DigitalSwearJar = (function() {
             // Unavoidable profanity filtering has us matching for the string '***'
             if (transcript.search(/\*+/) > 0 && confidence > 0.75) {
                 // event.results[0] is always the highest confidence transcript                
-                console.log(this, transcript.search(/\*+/))
+                console.log(_this, transcript.search(/\*+/))
                 console.log(event.results[0][0].transcript);    
-                this.stop();
-                this.blockchain.send($('#jaraddress').val(), 80000, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
-                this.start();
+                _this.stop();
+                _this.blockchain.send($('#jaraddress').val(), 80000, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
+                setTimeout(function() {
+                    _this.start();
+                }, 1000);
             }
             if (event.results && event.results[0] && event.results[0][0])
             console.log(event.results[0][0].confidence, event.results[0][0].transcript);
 
         };
+        })(this);
 
 
     }
@@ -194,3 +199,5 @@ var DigitalSwearJar = (function() {
 
     return DigitalSwearJar;
 })();
+
+var b = new DigitalSwearJar();
