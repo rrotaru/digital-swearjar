@@ -49,7 +49,8 @@ def show_balance():
 @app.route("/payment", methods=['POST'])
 def make_payment():
     payload = {
-            'password':request.form['password'], 
+            'password':request.form['password'],
+            'amount':request.form['amount'],
             'to':request.form['to'], 
             'note':request.form.get('note', "")    
     }
