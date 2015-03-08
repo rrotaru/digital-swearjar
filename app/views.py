@@ -50,6 +50,7 @@ def show_balance():
 def make_payment():
     payload = {
             'password':request.form['password'], 
+            'amount':request.form['amount'],
             'to':request.form['to'], 
             'note':request.form.get('note', "")    
     }

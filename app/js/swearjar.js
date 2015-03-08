@@ -89,6 +89,7 @@ var BlockChain = (function() {
 
     BlockChain.prototype.request = function(action, params, callback) {
         var xhr = new XMLHttpRequest();
+        params.guid = this.guid;
         var request = Object.keys(params).map(function(k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]) }).join('&');        
 
         xhr.open("POST", [this.proxy, action].join('/'), true);
