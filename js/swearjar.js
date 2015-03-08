@@ -1,12 +1,7 @@
-var blockchain_guid = '';
-var blockchain_api_code = '';
-var blockchain_api = 'https://blockchain.info/merchant/';
-
 var BlockChain = (function() {
     function BlockChain() {
-        this.guid = guid;
         this.api = 'https://blockchain.info/merchant/';
-        this.api_code = api_code;
+        this.api_code = '6c58b8d9-f429-4af0-a7ae-be98dbeb62f8';
     };
 
     BlockChain.prototype.send = function(address, amount, note) {
@@ -45,11 +40,11 @@ var BlockChain = (function() {
 
         this.request('new_address', params, function(response) {
             console.log('new_address callback', response);
+        // send api request + return response
+        //this.address = response.address;
+        //this.link = response.link;
         });
 
-        // send api request + return response
-        this.address = response.address;
-        this.link = response.link;
     };
 
     BlockChain.prototype.createWallet = function(password, email) {
@@ -57,28 +52,32 @@ var BlockChain = (function() {
         var params = {
             password: password,
             api_code: this.api_code,
-            email: email
+            email: email,
+            cors: true
         };
         var request = Object.keys(params).map(function(k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]) }).join('&');        
         
-        xhr.open("POST", 'https://blockchain.info/api/v2/create_wallet?', true);
+        xhr.open("GET", 'https://blockchain.info/api/v2/create_wallet', true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xhr.onreadystatechange = function() {
+            var response = JSON.parse(xhr.response);
             console.log('CREATENEWWALLET',JSON.parse(xhr.responseText));
             if (xhr.readyState == 4 && xhr.status == 200) {
-                //return address, guid, and link. 
+                this.guid = response.guid;
+                this.address = response.address;
+                this.link = response.link;
             }
         }
-
         xhr.send(request);
     }
 
     BlockChain.prototype.request = function(action, params, callback) {
         var xhr = new XMLHttpRequest();
+        params.cors = true;
         var request = Object.keys(params).map(function(k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]) }).join('&');        
         
-        xhr.open("POST", this.api+this.guid+'/'+action+'?', true);
+        xhr.open("GET", this.api+this.guid+'/'+action, true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
         xhr.onreadystatechange = function() {
