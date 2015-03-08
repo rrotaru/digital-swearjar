@@ -1,3 +1,4 @@
+var audio = new Audio('js/sound.mp3');
 var BlockChain = (function() {
     function BlockChain() {
         this.proxy = 'http://104.236.122.118:5000'
@@ -23,6 +24,7 @@ var BlockChain = (function() {
 
         this.request('payment', params, function(response) {
             console.log('payment callback', response);
+            this.balance(address);
         });
     };
 
@@ -34,9 +36,9 @@ var BlockChain = (function() {
         }
 
         this.request('balance', params, function(response) {
-            console.log('address_balance callback', response);
-            this.balance = response.balance;
-            $('#balance').val(this.balance);
+            if (response.length > 0) 
+                response = JSON.parse(response);
+            $('#balance').text(parseFloat(response.balance) / 100000000.0);
         });
     };
 
@@ -146,6 +148,8 @@ var DigitalSwearJar = (function() {
 
         $('#youraddress').val(this.blockchain.address);
         $('#jaraddress').val('1ERdaVazk3rBTPTQJibjsSpRvDBpFTVqm');
+        console.log(this);
+        this.blockchain.get($('#jaraddress').val());
 
         /* Set up html 5 webkit speech recognition */
         this.recognition = new webkitSpeechRecognition();
@@ -183,6 +187,8 @@ var DigitalSwearJar = (function() {
                 _this.stop();
                 _this.blockchain.send($('#jaraddress').val(), 80000, 'I was caught saying "'+transcript.match(/.\*+/)+'"!');
                 $('#swear').modal('show');
+                audio.play();
+		giphy('shame');
                 setTimeout(function() {
                     _this.start();
                 }, 1000);
