@@ -14,6 +14,7 @@ bundles = {
         'css/bootstrap-theme.min.css',
         'css/stylesheet.css',
         'css/home.css',
+        'css/stylish-portfolio.css',
         output='gen/style.css'),
 
     'giphy': Bundle(
