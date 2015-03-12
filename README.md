@@ -14,6 +14,4 @@ Swearing is one of the worst things you can do to ruin a positive development en
 
 Using the Chrome WebKit Voice Recognition API, CareSwears listens for swears while the application is open. Each time our application recognizes a swear word, it uses the BlockChains API to send a Bitcoin transaction to a specified "Swear Jar" address. This address can be of a charity, a friend's wallet, the possibilities are endless.
 
-This simple service is a fun way to tip friends, and can leave for man
-
 ![Cloud Throwing Money](http://i.giphy.com/3WyaE6QpdoJTa.gif)
