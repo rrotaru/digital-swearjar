@@ -1,26 +1,19 @@
-# [Start Bootstrap](http://startbootstrap.com/) - [Stylish Portfolio](http://startbootstrap.com/template-overviews/stylish-portfolio/)
+#CareSwears <3
 
-[Stylish Portfolio](http://startbootstrap.com/template-overviews/stylish-portfolio/) is a responsive, one page portfolio theme for [Bootstrap](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/). The theme features multiple content sections with an off canvas navigation menu.
+It's 3am Saturday morning.
+You're finishing up the last bit of code on your application when disaster strikes
 
-## Getting Started
+You accidentally type in "sudo rm -rf /*"
 
-To use this template, choose one of the following options to get started:
-* Download the latest release on Start Bootstrap
-* Fork this repository on GitHub
+In your rage, you scream "F**K!"
 
-## Bugs and Issues
+##### "Cha-Ching", "You just added $0.25 to 'Swear Jar'"
 
-Have a bug or an issue with this theme? [Open a new issue](https://github.com/IronSummitMedia/startbootstrap-stylish-portfolio/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](http://startbootstrap.com/template-overviews/stylish-portfolio/).
 
-## Creator
+Swearing is one of the worst things you can do to ruin a positive development environment, which is why we're here to help. 
 
-Start Bootstrap was created by and is maintained by **David Miller**, Managing Parter at [Iron Summit Media Strategies](http://www.ironsummitmedia.com/).
+Using the Chrome WebKit Voice Recognition API, CareSwears listens for swears while the application is open. Each time our application recognizes a swear word, it uses the BlockChains API to send a Bitcoin transaction to a specified "Swear Jar" address. This address can be of a charity, a friend's wallet, the possibilities are endless.
 
-* https://twitter.com/davidmillerskt
-* https://github.com/davidtmiller
+This simple service is a fun way to tip friends, and can leave for man
 
-Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
-
-## Copyright and License
-
-Copyright 2013-2015 Iron Summit Media Strategies, LLC. Code released under the [Apache 2.0](https://github.com/IronSummitMedia/startbootstrap-stylish-portfolio/blob/gh-pages/LICENSE) license.
+![Cloud Throwing Money](http://i.giphy.com/3WyaE6QpdoJTa.gif)
